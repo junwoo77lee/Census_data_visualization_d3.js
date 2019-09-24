@@ -1,7 +1,7 @@
 .aText {
   font-family: sans-serif;
   font-size: 16px;
-  text-anchor: middle;
+  /* text-anchor: middle; */
 }
 
 .active {
@@ -26,12 +26,13 @@
 /* font size dependent on radius, see app.js */
 .stateText {
   font-family: sans-serif;
+  font-size: 14px;
   fill: #000;
   text-anchor: middle;
 }
 
 .stateCircle {
-  fill: #89bdd3;
+  fill: #8f877d;
   stroke: #e3e3e3;
 }
 

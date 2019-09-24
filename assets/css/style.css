@@ -12,6 +12,7 @@ html {
 body {
   /* Padding bottom by footer height */
   padding-bottom: 80px;
+  margin: 30px;
 }
 
 #footer {
