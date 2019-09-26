@@ -4,7 +4,7 @@ function drawMap(svg, acsData, currentFeature, stateFeature, width, height) {
     svg.html("");
 
     const projection = d3.geoAlbersUsa()
-        .scale(1000)
+        .scale(900)
         .translate([width / 2, height / 2]);
     path = d3.geoPath(projection);
 

@@ -12,9 +12,7 @@ const margin = {
 const svg = d3.select('#scatter').append('svg');
 
 svg
-    .attr('width', svgWidth)
-    .attr('height', svgHeight)
-    .attr('viewbox', `0 0 ${svgWidth} ${svgHeight}`)
+    .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`)
     .attr('preserveAspectRatio', 'xMinYMin');
 
 const chartGroup = svg.append('g')
@@ -59,7 +57,7 @@ function renderXAxis(newXScale, xAxis) {
     const bottomAxis = d3.axisBottom(newXScale);
 
     xAxis.transition()
-        .duration(100)
+        .duration(1000)
         .call(bottomAxis);
 
     return xAxis;
@@ -68,7 +66,7 @@ function renderXAxis(newXScale, xAxis) {
 function renderCirclesInXaxis(circleGroup, newXScale, oldYScale, currentXfeature) {
     // modifiy the postion of circles when features changed
     circleGroup.transition()
-        .duration(100)
+        .duration(1000)
         .attr('transform', function (d) {
             return `translate(${newXScale(d[currentXfeature])},
                               ${oldYScale(d[currentYfeature])})`
@@ -92,7 +90,7 @@ function renderYAxis(newYScale, yAxis) {
     const leftAxis = d3.axisLeft(newYScale);
 
     yAxis.transition()
-        .duration(100)
+        .duration(1000)
         .call(leftAxis);
 
     return yAxis;
@@ -101,7 +99,7 @@ function renderYAxis(newYScale, yAxis) {
 function renderCirclesInYaxis(circleGroup, oldXScale, newYScale, currentYfeature) {
     // modifiy the postion of circles when features changed
     circleGroup.transition()
-        .duration(100)
+        .duration(1000)
         .attr('transform', function (d) {
             return `translate(${oldXScale(d[currentXfeature])},
                                       ${newYScale(d[currentYfeature])})`
@@ -300,6 +298,11 @@ d3.json('assets/data/us-states.json')
             if (value !== currentXfeature) {
                 currentXfeature = value;
 
+                //Redraw choropleth map with new dataset
+                const capitalizedXfeat = currentXfeature[0].toUpperCase() + currentXfeature.slice(1)
+                d3.select('#choroXtitle').html(`Choropleth map for x-axis: <em>${capitalizedXfeat}</em>`);
+                drawMap(geoSvgX, acsData, currentXfeature, statesGeoData, geoSvgWidth, geoSvgHeight);
+
                 xScale = xScaler(acsData, currentXfeature);
                 xAxis = renderXAxis(xScale, xAxis);
                 circleGroup = renderCirclesInXaxis(circleGroup, xScale, yScale, currentXfeature);
@@ -309,11 +312,7 @@ d3.json('assets/data/us-states.json')
                 xData = acsData.map(d => xScale(d[currentXfeature]));                
                 regressionLine(regressionGroup, xData, yData);
 
-                //Redraw choropleth map with new dataset
-                const capitalizedXfeat = currentXfeature[0].toUpperCase() + currentXfeature.slice(1)
-                d3.select('#choroXtitle').html(`Choropleth map for x-axis: <em>${capitalizedXfeat}</em>`);
-                drawMap(geoSvgX, acsData, currentXfeature, statesGeoData, geoSvgWidth, geoSvgHeight);
-
+                
                 switch (currentXfeature) {
                     case chosenXfeatures[0]:
                         xLabel1.classed('active', true)
@@ -353,6 +352,11 @@ d3.json('assets/data/us-states.json')
             if (value !== currentYfeature) {
                 currentYfeature = value;
 
+                //Redraw chropleth map with new dataset
+                const capitalizedYfeat = currentYfeature[0].toUpperCase() + currentYfeature.slice(1)
+                d3.select('#choroYtitle').html(`Choropleth map for y-axis: <em>${capitalizedYfeat}</em>`);
+                drawMap(geoSvgY, acsData, currentYfeature, statesGeoData, geoSvgWidth, geoSvgHeight);
+
                 yScale = yScaler(acsData, currentYfeature);
                 yAxis = renderYAxis(yScale, yAxis);
                 circleGroup = renderCirclesInYaxis(circleGroup, xScale, yScale, currentYfeature);
@@ -361,11 +365,6 @@ d3.json('assets/data/us-states.json')
                 //Reassign dataset for the regression line
                 yData = acsData.map(d => yScale(d[currentYfeature]));                
                 regressionLine(regressionGroup, xData, yData);
-
-                //Redraw chropleth map with new dataset
-                const capitalizedYfeat = currentYfeature[0].toUpperCase() + currentYfeature.slice(1)
-                d3.select('#choroYtitle').html(`Choropleth map for y-axis: <em>${capitalizedYfeat}</em>`);
-                drawMap(geoSvgY, acsData, currentYfeature, statesGeoData, geoSvgWidth, geoSvgHeight);
 
                 switch (currentYfeature) {
                     case chosenYfeatures[0]:
